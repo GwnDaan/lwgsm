@@ -2138,7 +2138,7 @@ lwgsmi_initiate_cmd(lwgsm_msg_t* msg) {
                 case LWGSM_CMD_CPBW_SET: mem = msg->msg.pb_write.mem; break;
                 case LWGSM_CMD_CPBR: mem = msg->msg.pb_list.mem; break;
                 case LWGSM_CMD_CPBF: mem = msg->msg.pb_search.mem; break;
-                default: break;
+                default: mem = 0; break;
             }
             lwgsmi_send_dev_memory(mem == LWGSM_MEM_CURRENT ? lwgsm.m.pb.mem.current : mem, 1, 0);
             AT_PORT_SEND_END_AT();
@@ -2301,6 +2301,7 @@ lwgsmi_send_msg_to_producer_mbox(lwgsm_msg_t* msg, lwgsmr_t (*process_fn)(lwgsm_
             return lwgsmERRMEM;
         }
     }
+    printf("lwgsmi_send_msg_to_producer_mbox 3\r\n");
     if (res == lwgsmOK && msg->is_blocking) {    /* In case we have blocking request */
         uint32_t time;
         time = lwgsm_sys_sem_wait(&msg->sem, 0); /* Wait forever for semaphore */
@@ -2311,6 +2312,7 @@ lwgsmi_send_msg_to_producer_mbox(lwgsm_msg_t* msg, lwgsmr_t (*process_fn)(lwgsm_
         }
         LWGSM_MSG_VAR_FREE(msg);                 /* Release message */
     }
+    printf("lwgsmi_send_msg_to_producer_mbox 4\r\n");
     return res;
 }
 

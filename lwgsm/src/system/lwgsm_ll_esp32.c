@@ -37,6 +37,7 @@
 #include "lwgsm/lwgsm_input.h"
 #include "lwgsm/lwgsm_mem.h"
 #include "lwgsm/lwgsm_types.h"
+#include "lwgsm/lwgsm_utils.h"
 #include "system/lwgsm_ll.h"
 
 #if !__DOXYGEN__
@@ -45,7 +46,7 @@
 #define TAG          "lwGSM"
 
 /* Defines ESP uart number to use */
-#define GSM_UART_NUM UART_NUM_1
+#define GSM_UART_NUM UART_NUM_2
 
 #if !defined(LWGSM_USART_DMA_RX_BUFF_SIZE)
 #define LWGSM_USART_DMA_RX_BUFF_SIZE 0x1000
@@ -59,7 +60,7 @@ static QueueHandle_t gsm_uart_queue;
 
 static uint8_t initialized = 0;
 
-char* uart_buffer[LWGSM_USART_DMA_RX_BUFF_SIZE];
+char uart_buffer[LWGSM_USART_DMA_RX_BUFF_SIZE];
 
 /**
  * \brief           Send data to GSM device, function called from GSM stack when we have data to send
@@ -72,8 +73,9 @@ send_data(const void* data, size_t len) {
     /* Implement send function here */
     if (len) {
         len = uart_write_bytes(GSM_UART_NUM, (const char*)data, len);
-        //uart_wait_tx_done(GSM_UART_NUM, portMAX_DELAY);
-        ESP_LOG_BUFFER_HEXDUMP(">", data, len, ESP_LOG_DEBUG);
+        uart_wait_tx_done(GSM_UART_NUM, portMAX_DELAY);
+        // ESP_LOGI(TAG, "send_data: %s", (const char*)data);
+        // ESP_LOG_BUFFER_HEXDUMP(">", data, len, ESP_LOG_DEBUG);
     }
     return len; /* Return number of bytes actually sent to AT port */
 }
@@ -85,11 +87,13 @@ uart_event_task(void* pvParameters) {
 
     for (;;) {
         //Waiting for UART event.
-        if (xQueueReceive(gsm_uart_queue, (void*)&event, (portTickType)portMAX_DELAY)) {
+        if (xQueueReceive(gsm_uart_queue, (void*)&event, portMAX_DELAY)) {
             switch (event.type) {
                 case UART_DATA:
                     uart_get_buffered_data_len(GSM_UART_NUM, &buffer_len);
                     buffer_len = uart_read_bytes(GSM_UART_NUM, (void*)uart_buffer, buffer_len, portMAX_DELAY);
+                    ESP_LOGI(TAG, "RECEIVED");
+                    // ESP_LOGI(TAG, "uart_event_task: %s", uart_buffer);
                     ESP_LOG_BUFFER_HEXDUMP("<", uart_buffer, buffer_len, ESP_LOG_DEBUG);
                     if (buffer_len) {
 #if LWGSM_CFG_INPUT_USE_PROCESS
@@ -161,7 +165,7 @@ lwgsm_ll_init(lwgsm_ll_t* ll) {
         lwgsm_mem_assignmemory(mem_regions,
                                LWGSM_ARRAYSIZE(mem_regions)); /* Assign memory for allocations to GSM library */
     }
-#endif /* !LWGSM_CFG_MEM_CUSTOM */
+#endif                                                        /* !LWGSM_CFG_MEM_CUSTOM */
 
     /* Step 2: Set AT port send function to use when we have data to transmit */
     if (!initialized) {

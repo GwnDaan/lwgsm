@@ -30,10 +30,10 @@
  *                  Ilya Kargapolov <d3vil.st@gmail.com>
  * Version:         v0.1.1
  */
-#include "FreeRTOS.h"
-#include "semphr.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
+#include "freertos/task.h"
 #include "system/lwgsm_sys.h"
-#include "task.h"
 
 #if !__DOXYGEN__
 

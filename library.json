@@ -9,16 +9,14 @@
 	},
 	"authors": [
 		{
-		  	"name": "Tilen Majerle",
-		  	"email": "tilen@majerle.eu",
-		  	"url": "https://majerle.eu"
+			"name": "Tilen Majerle",
+			"email": "tilen@majerle.eu",
+			"url": "https://majerle.eu"
 		}
 	],
 	"license": "MIT",
 	"homepage": "https://github.com/MaJerle/lwgsm",
-	"dependencies": {
-
-	},
+	"dependencies": {},
 	"frameworks": "*",
 	"platforms": "*",
 	"export": {
@@ -30,6 +28,23 @@
 			"**/Debug",
 			"build",
 			"**/build"
+		]
+	},
+	"build": {
+		"flags": [
+			"-Ilwgsm/src/include",
+			"-Idev",
+			"-Ilwgsm/src/include/system/port/freeRTOS"
+		],
+		"srcFilter": [
+			"+<*>",
+			"-<docs/>",
+			"-<examples/>",
+			"-<snippets/>",
+			"-<dev/>",
+			"-<lwgsm/src/system>",
+			"+<lwgsm/src/system/lwgsm_sys_freeRTOS.c>",
+			"+<lwgsm/src/system/lwgsm_ll_esp32.c>"
 		]
 	}
 }
