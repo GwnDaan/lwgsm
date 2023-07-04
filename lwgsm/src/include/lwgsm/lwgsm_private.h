@@ -63,6 +63,7 @@ typedef enum {
     /* Basic AT commands */
     LWGSM_CMD_RESET,                  /*!< Reset device */
     LWGSM_CMD_RESET_DEVICE_FIRST_CMD, /*!< Reset device first driver specific command */
+    LWGSM_CMD_AUTO_BAUDRATE,          /*!< Auto baudrate synchronization command */
     LWGSM_CMD_ATE0,                   /*!< Disable ECHO mode on AT commands */
     LWGSM_CMD_ATE1,                   /*!< Enable ECHO mode on AT commands */
     LWGSM_CMD_GSLP,                   /*!< Set GSM to sleep mode */
@@ -135,33 +136,33 @@ typedef enum {
     LWGSM_CMD_CGMR_GET,     /*!< Request TA Revision Identification of Software Release */
     LWGSM_CMD_CGSN_GET,     /*!< Request Product Serial Number Identification (Identical with +GSN) */
 
-    LWGSM_CMD_CLCC_SET, /*!< List Current Calls of ME */
-    LWGSM_CMD_CLCK,     /*!< Facility Lock */
+    LWGSM_CMD_CLCC_SET,     /*!< List Current Calls of ME */
+    LWGSM_CMD_CLCK,         /*!< Facility Lock */
 
-    LWGSM_CMD_CACM,     /*!< Accumulated Call Meter (ACM) Reset or Query */
-    LWGSM_CMD_CAMM,     /*!< Accumulated Call Meter Maximum (ACM max) Set or Query */
-    LWGSM_CMD_CAOC,     /*!< Advice of Charge */
-    LWGSM_CMD_CBST,     /*!< Select Bearer Service Type */
-    LWGSM_CMD_CCFC,     /*!< Call Forwarding Number and Conditions Control */
-    LWGSM_CMD_CCWA,     /*!< Call Waiting Control */
-    LWGSM_CMD_CEER,     /*!< Extended Error Report  */
-    LWGSM_CMD_CSCS,     /*!< Select TE Character Set */
-    LWGSM_CMD_CSTA,     /*!< Select Type of Address */
-    LWGSM_CMD_CHLD,     /*!< Call Hold and Multiparty */
-    LWGSM_CMD_CIMI,     /*!< Request International Mobile Subscriber Identity */
-    LWGSM_CMD_CLIP,     /*!< Calling Line Identification Presentation */
-    LWGSM_CMD_CLIR,     /*!< Calling Line Identification Restriction */
-    LWGSM_CMD_CMEE_SET, /*!< Report Mobile Equipment Error */
-    LWGSM_CMD_COLP,     /*!< Connected Line Identification Presentation */
+    LWGSM_CMD_CACM,         /*!< Accumulated Call Meter (ACM) Reset or Query */
+    LWGSM_CMD_CAMM,         /*!< Accumulated Call Meter Maximum (ACM max) Set or Query */
+    LWGSM_CMD_CAOC,         /*!< Advice of Charge */
+    LWGSM_CMD_CBST,         /*!< Select Bearer Service Type */
+    LWGSM_CMD_CCFC,         /*!< Call Forwarding Number and Conditions Control */
+    LWGSM_CMD_CCWA,         /*!< Call Waiting Control */
+    LWGSM_CMD_CEER,         /*!< Extended Error Report  */
+    LWGSM_CMD_CSCS,         /*!< Select TE Character Set */
+    LWGSM_CMD_CSTA,         /*!< Select Type of Address */
+    LWGSM_CMD_CHLD,         /*!< Call Hold and Multiparty */
+    LWGSM_CMD_CIMI,         /*!< Request International Mobile Subscriber Identity */
+    LWGSM_CMD_CLIP,         /*!< Calling Line Identification Presentation */
+    LWGSM_CMD_CLIR,         /*!< Calling Line Identification Restriction */
+    LWGSM_CMD_CMEE_SET,     /*!< Report Mobile Equipment Error */
+    LWGSM_CMD_COLP,         /*!< Connected Line Identification Presentation */
 
     LWGSM_CMD_PHONEBOOK_ENABLE,
-    LWGSM_CMD_CPBF,         /*!< Find Phonebook Entries */
-    LWGSM_CMD_CPBR,         /*!< Read Current Phonebook Entries  */
-    LWGSM_CMD_CPBS_SET,     /*!< Select Phonebook Memory Storage */
-    LWGSM_CMD_CPBS_GET,     /*!< Get current Phonebook Memory Storage */
-    LWGSM_CMD_CPBS_GET_OPT, /*!< Get available Phonebook Memory Storages */
-    LWGSM_CMD_CPBW_SET,     /*!< Write Phonebook Entry */
-    LWGSM_CMD_CPBW_GET_OPT, /*!< Get options for write Phonebook Entry */
+    LWGSM_CMD_CPBF,                   /*!< Find Phonebook Entries */
+    LWGSM_CMD_CPBR,                   /*!< Read Current Phonebook Entries  */
+    LWGSM_CMD_CPBS_SET,               /*!< Select Phonebook Memory Storage */
+    LWGSM_CMD_CPBS_GET,               /*!< Get current Phonebook Memory Storage */
+    LWGSM_CMD_CPBS_GET_OPT,           /*!< Get available Phonebook Memory Storages */
+    LWGSM_CMD_CPBW_SET,               /*!< Write Phonebook Entry */
+    LWGSM_CMD_CPBW_GET_OPT,           /*!< Get options for write Phonebook Entry */
 
     LWGSM_CMD_SIM_PROCESS_BASIC_CMDS, /*!< Command setup, executed when SIM is in READY state */
     LWGSM_CMD_CPIN_SET,               /*!< Enter PIN */
@@ -171,69 +172,69 @@ typedef enum {
     LWGSM_CMD_CPIN_REMOVE,            /*!< Remove current PIN */
     LWGSM_CMD_CPUK_SET,               /*!< Enter PUK and set new PIN */
 
-    LWGSM_CMD_CSQ_GET,  /*!< Signal Quality Report */
-    LWGSM_CMD_CFUN_SET, /*!< Set Phone Functionality */
-    LWGSM_CMD_CFUN_GET, /*!< Get Phone Functionality */
-    LWGSM_CMD_CREG_SET, /*!< Network Registration set output */
-    LWGSM_CMD_CREG_GET, /*!< Get current network registration status */
-    LWGSM_CMD_CBC,      /*!< Battery Charge */
-    LWGSM_CMD_CNUM,     /*!< Subscriber Number */
+    LWGSM_CMD_CSQ_GET,                /*!< Signal Quality Report */
+    LWGSM_CMD_CFUN_SET,               /*!< Set Phone Functionality */
+    LWGSM_CMD_CFUN_GET,               /*!< Get Phone Functionality */
+    LWGSM_CMD_CREG_SET,               /*!< Network Registration set output */
+    LWGSM_CMD_CREG_GET,               /*!< Get current network registration status */
+    LWGSM_CMD_CBC,                    /*!< Battery Charge */
+    LWGSM_CMD_CNUM,                   /*!< Subscriber Number */
 
-    LWGSM_CMD_CPWD,     /*!< Change Password */
-    LWGSM_CMD_CR,       /*!< Service Reporting Control */
-    LWGSM_CMD_CRC,      /*!< Set Cellular Result Codes for Incoming Call Indication */
-    LWGSM_CMD_CRLP,     /*!< Select Radio Link Protocol Parameters  */
-    LWGSM_CMD_CRSM,     /*!< Restricted SIM Access */
-    LWGSM_CMD_VTD,      /*!< Tone Duration */
-    LWGSM_CMD_VTS,      /*!< DTMF and Tone Generation */
-    LWGSM_CMD_CMUX,     /*!< Multiplexer Control */
-    LWGSM_CMD_CPOL,     /*!< Preferred Operator List */
-    LWGSM_CMD_COPN,     /*!< Read Operator Names */
-    LWGSM_CMD_CCLK,     /*!< Clock */
-    LWGSM_CMD_CSIM,     /*!< Generic SIM Access */
-    LWGSM_CMD_CALM,     /*!< Alert Sound Mode */
-    LWGSM_CMD_CALS,     /*!< Alert Sound Select */
-    LWGSM_CMD_CRSL,     /*!< Ringer Sound Level */
-    LWGSM_CMD_CLVL,     /*!< Loud Speaker Volume Level */
-    LWGSM_CMD_CMUT,     /*!< Mute Control */
-    LWGSM_CMD_CPUC,     /*!< Price Per Unit and Currency Table */
-    LWGSM_CMD_CCWE,     /*!< Call Meter Maximum Event */
-    LWGSM_CMD_CUSD_SET, /*!< Unstructured Supplementary Service Data, Set command */
-    LWGSM_CMD_CUSD_GET, /*!< Unstructured Supplementary Service Data, Get command */
-    LWGSM_CMD_CUSD,     /*!< Unstructured Supplementary Service Data, Execute command */
-    LWGSM_CMD_CSSN,     /*!< Supplementary Services Notification */
+    LWGSM_CMD_CPWD,                   /*!< Change Password */
+    LWGSM_CMD_CR,                     /*!< Service Reporting Control */
+    LWGSM_CMD_CRC,                    /*!< Set Cellular Result Codes for Incoming Call Indication */
+    LWGSM_CMD_CRLP,                   /*!< Select Radio Link Protocol Parameters  */
+    LWGSM_CMD_CRSM,                   /*!< Restricted SIM Access */
+    LWGSM_CMD_VTD,                    /*!< Tone Duration */
+    LWGSM_CMD_VTS,                    /*!< DTMF and Tone Generation */
+    LWGSM_CMD_CMUX,                   /*!< Multiplexer Control */
+    LWGSM_CMD_CPOL,                   /*!< Preferred Operator List */
+    LWGSM_CMD_COPN,                   /*!< Read Operator Names */
+    LWGSM_CMD_CCLK,                   /*!< Clock */
+    LWGSM_CMD_CSIM,                   /*!< Generic SIM Access */
+    LWGSM_CMD_CALM,                   /*!< Alert Sound Mode */
+    LWGSM_CMD_CALS,                   /*!< Alert Sound Select */
+    LWGSM_CMD_CRSL,                   /*!< Ringer Sound Level */
+    LWGSM_CMD_CLVL,                   /*!< Loud Speaker Volume Level */
+    LWGSM_CMD_CMUT,                   /*!< Mute Control */
+    LWGSM_CMD_CPUC,                   /*!< Price Per Unit and Currency Table */
+    LWGSM_CMD_CCWE,                   /*!< Call Meter Maximum Event */
+    LWGSM_CMD_CUSD_SET,               /*!< Unstructured Supplementary Service Data, Set command */
+    LWGSM_CMD_CUSD_GET,               /*!< Unstructured Supplementary Service Data, Get command */
+    LWGSM_CMD_CUSD,                   /*!< Unstructured Supplementary Service Data, Execute command */
+    LWGSM_CMD_CSSN,                   /*!< Supplementary Services Notification */
 
-    LWGSM_CMD_CIPMUX,     /*!< Start Up Multi-IP Connection */
-    LWGSM_CMD_CIPSTART,   /*!< Start Up TCP or UDP Connection */
-    LWGSM_CMD_CIPSEND,    /*!< Send Data Through TCP or UDP Connection */
-    LWGSM_CMD_CIPQSEND,   /*!< Select Data Transmitting Mode */
-    LWGSM_CMD_CIPACK,     /*!< Query Previous Connection Data Transmitting State */
-    LWGSM_CMD_CIPCLOSE,   /*!< Close TCP or UDP Connection */
-    LWGSM_CMD_CIPSHUT,    /*!< Deactivate GPRS PDP Context */
-    LWGSM_CMD_CLPORT,     /*!< Set Local Port */
-    LWGSM_CMD_CSTT,       /*!< Start Task and Set APN, username, password */
-    LWGSM_CMD_CIICR,      /*!< Bring Up Wireless Connection with GPRS or CSD */
-    LWGSM_CMD_CIFSR,      /*!< Get Local IP Address */
-    LWGSM_CMD_CIPSTATUS,  /*!< Query Current Connection Status */
-    LWGSM_CMD_CDNSCFG,    /*!< Configure Domain Name Server */
-    LWGSM_CMD_CDNSGIP,    /*!< Query the IP Address of Given Domain Name */
-    LWGSM_CMD_CIPHEAD,    /*!< Add an IP Head at the Beginning of a Package Received */
-    LWGSM_CMD_CIPATS,     /*!< Set Auto Sending Timer */
-    LWGSM_CMD_CIPSPRT,    /*!< Set Prompt of greater than sign When Module Sends Data */
-    LWGSM_CMD_CIPSERVER,  /*!< Configure Module as Server */
-    LWGSM_CMD_CIPCSGP,    /*!< Set CSD or GPRS for Connection Mode */
-    LWGSM_CMD_CIPSRIP,    /*!< Show Remote IP Address and Port When Received Data */
-    LWGSM_CMD_CIPDPDP,    /*!< Set Whether to Check State of GPRS Network Timing */
-    LWGSM_CMD_CIPMODE,    /*!< Select TCPIP Application Mode */
-    LWGSM_CMD_CIPCCFG,    /*!< Configure Transparent Transfer Mode */
-    LWGSM_CMD_CIPSHOWTP,  /*!< Display Transfer Protocol in IP Head When Received Data */
-    LWGSM_CMD_CIPUDPMODE, /*!< UDP Extended Mode */
-    LWGSM_CMD_CIPRXGET,   /*!< Get Data from Network Manually */
-    LWGSM_CMD_CIPSCONT,   /*!< Save TCPIP Application Context */
-    LWGSM_CMD_CIPRDTIMER, /*!< Set Remote Delay Timer */
-    LWGSM_CMD_CIPSGTXT,   /*!< Select GPRS PDP context */
-    LWGSM_CMD_CIPTKA,     /*!< Set TCP Keepalive Parameters */
-    LWGSM_CMD_CIPSSL,     /*!< Connection SSL function */
+    LWGSM_CMD_CIPMUX,                 /*!< Start Up Multi-IP Connection */
+    LWGSM_CMD_CIPSTART,               /*!< Start Up TCP or UDP Connection */
+    LWGSM_CMD_CIPSEND,                /*!< Send Data Through TCP or UDP Connection */
+    LWGSM_CMD_CIPQSEND,               /*!< Select Data Transmitting Mode */
+    LWGSM_CMD_CIPACK,                 /*!< Query Previous Connection Data Transmitting State */
+    LWGSM_CMD_CIPCLOSE,               /*!< Close TCP or UDP Connection */
+    LWGSM_CMD_CIPSHUT,                /*!< Deactivate GPRS PDP Context */
+    LWGSM_CMD_CLPORT,                 /*!< Set Local Port */
+    LWGSM_CMD_CSTT,                   /*!< Start Task and Set APN, username, password */
+    LWGSM_CMD_CIICR,                  /*!< Bring Up Wireless Connection with GPRS or CSD */
+    LWGSM_CMD_CIFSR,                  /*!< Get Local IP Address */
+    LWGSM_CMD_CIPSTATUS,              /*!< Query Current Connection Status */
+    LWGSM_CMD_CDNSCFG,                /*!< Configure Domain Name Server */
+    LWGSM_CMD_CDNSGIP,                /*!< Query the IP Address of Given Domain Name */
+    LWGSM_CMD_CIPHEAD,                /*!< Add an IP Head at the Beginning of a Package Received */
+    LWGSM_CMD_CIPATS,                 /*!< Set Auto Sending Timer */
+    LWGSM_CMD_CIPSPRT,                /*!< Set Prompt of greater than sign When Module Sends Data */
+    LWGSM_CMD_CIPSERVER,              /*!< Configure Module as Server */
+    LWGSM_CMD_CIPCSGP,                /*!< Set CSD or GPRS for Connection Mode */
+    LWGSM_CMD_CIPSRIP,                /*!< Show Remote IP Address and Port When Received Data */
+    LWGSM_CMD_CIPDPDP,                /*!< Set Whether to Check State of GPRS Network Timing */
+    LWGSM_CMD_CIPMODE,                /*!< Select TCPIP Application Mode */
+    LWGSM_CMD_CIPCCFG,                /*!< Configure Transparent Transfer Mode */
+    LWGSM_CMD_CIPSHOWTP,              /*!< Display Transfer Protocol in IP Head When Received Data */
+    LWGSM_CMD_CIPUDPMODE,             /*!< UDP Extended Mode */
+    LWGSM_CMD_CIPRXGET,               /*!< Get Data from Network Manually */
+    LWGSM_CMD_CIPSCONT,               /*!< Save TCPIP Application Context */
+    LWGSM_CMD_CIPRDTIMER,             /*!< Set Remote Delay Timer */
+    LWGSM_CMD_CIPSGTXT,               /*!< Select GPRS PDP context */
+    LWGSM_CMD_CIPTKA,                 /*!< Set TCP Keepalive Parameters */
+    LWGSM_CMD_CIPSSL,                 /*!< Connection SSL function */
 
     LWGSM_CMD_SMS_ENABLE,
     LWGSM_CMD_CMGD,         /*!< Delete SMS Message */
@@ -256,7 +257,7 @@ typedef enum {
     LWGSM_CMD_CSMP,         /*!< Set SMS Text Mode Parameters */
     LWGSM_CMD_CSMS,         /*!< Select Message Service */
 
-    LWGSM_CMD_END, /*!< Last CMD entry */
+    LWGSM_CMD_END,          /*!< Last CMD entry */
 } lwgsm_cmd_t;
 
 /**
@@ -271,13 +272,13 @@ typedef struct lwgsm_conn {
     lwgsm_evt_fn evt_func;    /*!< Callback function for connection */
     void* arg;                /*!< User custom argument */
 
-    uint8_t val_id; /*!< Validation ID number. It is increased each time a new connection is established.
+    uint8_t val_id;           /*!< Validation ID number. It is increased each time a new connection is established.
                                                      It protects sending data to wrong connection in case we have data in send queue,
                                                      and connection was closed and active again in between. */
 
-    lwgsm_linbuff_t buff; /*!< Linear buffer structure */
+    lwgsm_linbuff_t buff;     /*!< Linear buffer structure */
 
-    size_t total_recved; /*!< Total number of bytes received */
+    size_t total_recved;      /*!< Total number of bytes received */
 
     union {
         struct {
@@ -349,8 +350,10 @@ typedef struct lwgsm_msg {
 
     union {
         struct {
-            uint32_t delay; /*!< Delay to use before sending first reset AT command */
-        } reset;            /*!< Reset device */
+            uint32_t delay;    /*!< Delay to use before sending first reset AT command */
+            uint8_t tries;     /*!< Number of tries to send reset AT command */
+            uint8_t responses; /*!< Number of responses received */
+        } reset;               /*!< Reset device */
 
         struct {
             uint32_t baudrate; /*!< Baudrate for AT port */
@@ -524,13 +527,13 @@ typedef struct lwgsm_msg {
         } pb_search;                   /*!< Search phonebook entries */
 #endif                                 /* LWGSM_CFG_PHONEBOOK || __DOXYGEN__ */
         struct {
-            const char* code;      /*!< Code to send */
-            char* resp;            /*!< Response array */
-            size_t resp_len;       /*!< Length of response array */
-            uint8_t read;          /*!< Flag indicating we can read the COPS actual data */
-            size_t resp_write_ptr; /*!< Write pointer for response */
-            uint8_t quote_det;     /*!< Information if quote has been detected */
-        } ussd;                    /*!< Execute USSD command */
+            const char* code;          /*!< Code to send */
+            char* resp;                /*!< Response array */
+            size_t resp_len;           /*!< Length of response array */
+            uint8_t read;              /*!< Flag indicating we can read the COPS actual data */
+            size_t resp_write_ptr;     /*!< Write pointer for response */
+            uint8_t quote_det;         /*!< Information if quote has been detected */
+        } ussd;                        /*!< Execute USSD command */
 #if LWGSM_CFG_NETWORK || __DOXYGEN__
         struct {
             const char* apn;  /*!< APN address */
@@ -588,8 +591,8 @@ typedef struct {
  * \brief           SMS structure
  */
 typedef struct {
-    uint8_t ready;   /*!< Flag indicating feature ready by device */
-    uint8_t enabled; /*!< Flag indicating feature enabled */
+    uint8_t ready;          /*!< Flag indicating feature ready by device */
+    uint8_t enabled;        /*!< Flag indicating feature enabled */
 
     lwgsm_sms_mem_t mem[3]; /*!< 3 memory info for operation,receive,sent storage */
 } lwgsm_sms_t;
@@ -610,8 +613,8 @@ typedef struct {
  * \brief           Phonebook structure
  */
 typedef struct {
-    uint8_t ready;   /*!< Flag indicating feature ready by device */
-    uint8_t enabled; /*!< Flag indicating feature enabled */
+    uint8_t ready;      /*!< Flag indicating feature ready by device */
+    uint8_t enabled;    /*!< Flag indicating feature enabled */
 
     lwgsm_pb_mem_t mem; /*!< Memory information */
 } lwgsm_pb_t;
@@ -630,8 +633,8 @@ typedef struct {
     lwgsm_network_reg_status_t status;   /*!< Network registration status */
     lwgsm_operator_curr_t curr_operator; /*!< Current operator information */
 
-    uint8_t is_attached; /*!< Flag indicating device is attached and PDP context is active */
-    lwgsm_ip_t ip_addr;  /*!< Device IP address when network PDP context is enabled */
+    uint8_t is_attached;                 /*!< Flag indicating device is attached and PDP context is active */
+    lwgsm_ip_t ip_addr;                  /*!< Device IP address when network PDP context is enabled */
 } lwgsm_network_t;
 
 /**
@@ -652,28 +655,28 @@ typedef struct {
 
     /* Device specific */
 #if LWGSM_CFG_CONN || __DOXYGEN__
-    uint8_t active_conns_cur_parse_num; /*!< Current connection number used for parsing */
+    uint8_t active_conns_cur_parse_num;      /*!< Current connection number used for parsing */
 
     lwgsm_conn_t conns[LWGSM_CFG_MAX_CONNS]; /*!< Array of all connection structures */
     lwgsm_ipd_t ipd;                         /*!< Connection incoming data structure */
     uint8_t conn_val_id;                     /*!< Validation ID increased each time device connects to network */
 #endif                                       /* LWGSM_CFG_CONNS || __DOXYGEN__ */
 #if LWGSM_CFG_SMS || __DOXYGEN__
-    lwgsm_sms_t sms; /*!< SMS information */
-#endif               /* LWGSM_CFG_SMS || __DOXYGEN__ */
+    lwgsm_sms_t sms;                         /*!< SMS information */
+#endif                                       /* LWGSM_CFG_SMS || __DOXYGEN__ */
 #if LWGSM_CFG_PHONEBOOK || __DOXYGEN__
-    lwgsm_pb_t pb; /*!< Phonebook information */
-#endif             /* LWGSM_CFG_PHONEBOOK || __DOXYGEN__ */
+    lwgsm_pb_t pb;                           /*!< Phonebook information */
+#endif                                       /* LWGSM_CFG_PHONEBOOK || __DOXYGEN__ */
 #if LWGSM_CFG_CALL || __DOXYGEN__
-    lwgsm_call_t call; /*!< Call information */
-#endif                 /* LWGSM_CFG_CALL || __DOXYGEN__ */
+    lwgsm_call_t call;                       /*!< Call information */
+#endif                                       /* LWGSM_CFG_CALL || __DOXYGEN__ */
 } lwgsm_modules_t;
 
 /**
  * \brief           GSM global structure
  */
 typedef struct {
-    size_t locked_cnt; /*!< Counter how many times (recursive) stack is currently locked */
+    size_t locked_cnt;                 /*!< Counter how many times (recursive) stack is currently locked */
 
     lwgsm_sys_sem_t sem_sync;          /*!< Synchronization semaphore between threads */
     lwgsm_sys_mbox_t mbox_producer;    /*!< Producer message queue handle */
@@ -681,16 +684,16 @@ typedef struct {
     lwgsm_sys_thread_t thread_produce; /*!< Producer thread handle */
     lwgsm_sys_thread_t thread_process; /*!< Processing thread handle */
 #if !LWGSM_CFG_INPUT_USE_PROCESS || __DOXYGEN__
-    lwgsm_buff_t buff; /*!< Input processing buffer */
-#endif                 /* !LWGSM_CFG_INPUT_USE_PROCESS || __DOXYGEN__ */
-    lwgsm_ll_t ll;     /*!< Low level functions */
+    lwgsm_buff_t buff;                 /*!< Input processing buffer */
+#endif                                 /* !LWGSM_CFG_INPUT_USE_PROCESS || __DOXYGEN__ */
+    lwgsm_ll_t ll;                     /*!< Low level functions */
 
-    lwgsm_msg_t* msg; /*!< Pointer to current user message being executed */
+    lwgsm_msg_t* msg;                  /*!< Pointer to current user message being executed */
 
-    lwgsm_evt_t evt;            /*!< Callback processing structure */
-    lwgsm_evt_func_t* evt_func; /*!< Callback function linked list */
+    lwgsm_evt_t evt;                   /*!< Callback processing structure */
+    lwgsm_evt_func_t* evt_func;        /*!< Callback function linked list */
 
-    lwgsm_modules_t m; /*!< All modules. When resetting, reset structure */
+    lwgsm_modules_t m;                 /*!< All modules. When resetting, reset structure */
 
     union {
         struct {

@@ -211,7 +211,28 @@
  * \brief           Default delay (milliseconds unit) after reset sequence
  */
 #ifndef LWGSM_CFG_RESET_DELAY_AFTER
-#define LWGSM_CFG_RESET_DELAY_AFTER 5000
+#define LWGSM_CFG_RESET_DELAY_AFTER 15000
+#endif
+
+/**
+ * \brief           Enables `1` or disables `0` auto-baudrate initialization on reset sequence
+*/
+#ifndef LWGSM_CFG_RESET_INIT_AUTO_BAUDRATE
+#define LWGSM_CFG_RESET_INIT_AUTO_BAUDRATE 1
+#endif
+
+/**
+ * \brief           Number of baudrates to test for auto-baudrate detection
+ */
+#ifndef LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS
+#define LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS 5
+#endif
+
+/**
+ * \brief           Delay between baudrate detection commands
+*/
+#ifndef LWGSM_CFG_RESET_AUTOBAUD_DELAY
+#define LWGSM_CFG_RESET_AUTOBAUD_DELAY 1000
 #endif
 
 /**
@@ -288,7 +309,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_INIT
-#define LWGSM_CFG_DBG_INIT LWGSM_DBG_OFF
+#define LWGSM_CFG_DBG_INIT LWGSM_DBG_ON
 #endif
 
 /**
@@ -306,7 +327,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_INPUT
-#define LWGSM_CFG_DBG_INPUT LWGSM_DBG_OFF
+#define LWGSM_CFG_DBG_INPUT LWGSM_DBG_ON
 #endif
 
 /**
@@ -333,7 +354,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_IPD
-#define LWGSM_CFG_DBG_IPD LWGSM_DBG_OFF
+#define LWGSM_CFG_DBG_IPD LWGSM_DBG_ON
 #endif
 
 /**

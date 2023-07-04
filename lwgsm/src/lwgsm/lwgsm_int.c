@@ -907,6 +907,17 @@ lwgsmi_parse_received(lwgsm_recv_t* rcv) {
 
     /* Check general responses for active commands */
     if (lwgsm.msg != NULL) {
+        if (CMD_IS_CUR(LWGSM_CMD_AUTO_BAUDRATE)) {
+            /*
+            * We should get as many "OK" responses as AT commands sent
+            */
+            if (stat.is_ok) {
+                ++lwgsm.msg->msg.reset.responses; /* Increase response count */
+                if (lwgsm.msg->msg.reset.responses != lwgsm.msg->msg.reset.tries - 1) {
+                    stat.is_ok = false;           /* We are still waiting for more responses */
+                }
+            }
+        }
         if (CMD_IS_CUR(LWGSM_CMD_CPIN_GET)) {
             /*
              * CME ERROR 10 indicates no SIM pin inserted.
@@ -1006,6 +1017,8 @@ lwgsmi_parse_received(lwgsm_recv_t* rcv) {
 #endif /* LWGSM_CFG_USSD */
         }
     }
+
+    // printf("Rx: %s, is_ok: %d\n\r", rcv->data, stat.is_ok);
 
     /*
      * In case of any of these events, simply release semaphore
@@ -1393,13 +1406,23 @@ static lwgsmr_t
 lwgsmi_process_sub_cmd(lwgsm_msg_t* msg, lwgsm_status_flags_t* stat) {
     lwgsm_cmd_t n_cmd = LWGSM_CMD_IDLE;
     if (CMD_IS_DEF(LWGSM_CMD_RESET)) {
-        switch (CMD_GET_CUR()) {                                                  /* Check current command */
+        switch (CMD_GET_CUR()) { /* Check current command */
+            // case LWGSM_CMD_RESET_DEVICE_FIRST_CMD:
+            //     SET_NEW_CMD(LWGSM_CMD_RESET); /* Reset */
+            //     break;
             case LWGSM_CMD_RESET: {
-                lwgsmi_reset_everything(1);                                       /* Reset everything */
-                SET_NEW_CMD(LWGSM_CFG_AT_ECHO ? LWGSM_CMD_ATE1 : LWGSM_CMD_ATE0); /* Set ECHO mode */
+                lwgsmi_reset_everything(1);                                           /* Reset everything */
+                if (LWGSM_CFG_RESET_INIT_AUTO_BAUDRATE) {
+                    SET_NEW_CMD(LWGSM_CMD_RESET_DEVICE_FIRST_CMD);                    /* Start with first command */
+                } else {
+                    SET_NEW_CMD(LWGSM_CFG_AT_ECHO ? LWGSM_CMD_ATE1 : LWGSM_CMD_ATE0); /* Set ECHO mode */
+                }
                 lwgsm_delay(LWGSM_CFG_RESET_DELAY_AFTER); /* Delay for some time before we can continue after reset */
                 break;
             }
+            case LWGSM_CMD_AUTO_BAUDRATE:
+                SET_NEW_CMD(LWGSM_CFG_AT_ECHO ? LWGSM_CMD_ATE1 : LWGSM_CMD_ATE0); /* Set ECHO mode */
+                break;
             case LWGSM_CMD_ATE0:
             case LWGSM_CMD_ATE1: SET_NEW_CMD(LWGSM_CMD_CFUN_SET); break;     /* Set full functionality */
             case LWGSM_CMD_CFUN_SET: SET_NEW_CMD(LWGSM_CMD_CMEE_SET); break; /* Set detailed error reporting */
@@ -1740,6 +1763,7 @@ lwgsmi_initiate_cmd(lwgsm_msg_t* msg) {
             AT_PORT_SEND_END_AT();
             break;
         }
+        case LWGSM_CMD_AUTO_BAUDRATE:
         case LWGSM_CMD_RESET_DEVICE_FIRST_CMD: { /* First command for device driver specific reset */
             AT_PORT_SEND_BEGIN_AT();
             AT_PORT_SEND_END_AT();
@@ -2301,7 +2325,6 @@ lwgsmi_send_msg_to_producer_mbox(lwgsm_msg_t* msg, lwgsmr_t (*process_fn)(lwgsm_
             return lwgsmERRMEM;
         }
     }
-    printf("lwgsmi_send_msg_to_producer_mbox 3\r\n");
     if (res == lwgsmOK && msg->is_blocking) {    /* In case we have blocking request */
         uint32_t time;
         time = lwgsm_sys_sem_wait(&msg->sem, 0); /* Wait forever for semaphore */
@@ -2312,7 +2335,6 @@ lwgsmi_send_msg_to_producer_mbox(lwgsm_msg_t* msg, lwgsmr_t (*process_fn)(lwgsm_
         }
         LWGSM_MSG_VAR_FREE(msg);                 /* Release message */
     }
-    printf("lwgsmi_send_msg_to_producer_mbox 4\r\n");
     return res;
 }
 

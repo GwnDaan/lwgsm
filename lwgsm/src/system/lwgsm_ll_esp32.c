@@ -46,7 +46,7 @@
 #define TAG          "lwGSM"
 
 /* Defines ESP uart number to use */
-#define GSM_UART_NUM UART_NUM_2
+#define GSM_UART_NUM UART_NUM_1
 
 #if !defined(LWGSM_USART_DMA_RX_BUFF_SIZE)
 #define LWGSM_USART_DMA_RX_BUFF_SIZE 0x1000
@@ -74,8 +74,7 @@ send_data(const void* data, size_t len) {
     if (len) {
         len = uart_write_bytes(GSM_UART_NUM, (const char*)data, len);
         uart_wait_tx_done(GSM_UART_NUM, portMAX_DELAY);
-        // ESP_LOGI(TAG, "send_data: %s", (const char*)data);
-        // ESP_LOG_BUFFER_HEXDUMP(">", data, len, ESP_LOG_DEBUG);
+        ESP_LOG_BUFFER_HEXDUMP(">", data, len, ESP_LOG_DEBUG);
     }
     return len; /* Return number of bytes actually sent to AT port */
 }
@@ -92,8 +91,6 @@ uart_event_task(void* pvParameters) {
                 case UART_DATA:
                     uart_get_buffered_data_len(GSM_UART_NUM, &buffer_len);
                     buffer_len = uart_read_bytes(GSM_UART_NUM, (void*)uart_buffer, buffer_len, portMAX_DELAY);
-                    ESP_LOGI(TAG, "RECEIVED");
-                    // ESP_LOGI(TAG, "uart_event_task: %s", uart_buffer);
                     ESP_LOG_BUFFER_HEXDUMP("<", uart_buffer, buffer_len, ESP_LOG_DEBUG);
                     if (buffer_len) {
 #if LWGSM_CFG_INPUT_USE_PROCESS

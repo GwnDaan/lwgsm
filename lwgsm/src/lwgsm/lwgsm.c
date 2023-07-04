@@ -127,7 +127,6 @@ lwgsm_init(lwgsm_evt_fn evt_func, const uint32_t blocking) {
         goto cleanup;
     }
 
-    printf("lwgsm_sys_thread_create\r\n");
     lwgsm_sys_sem_wait(&lwgsm.sem_sync, 0); /* Wait semaphore, should be unlocked in produce thread */
     if (!lwgsm_sys_thread_create(&lwgsm.thread_process, "lwgsm_process", lwgsm_thread_process, &lwgsm.sem_sync,
                                  LWGSM_SYS_THREAD_SS, LWGSM_SYS_THREAD_PRIO)) {
@@ -138,7 +137,6 @@ lwgsm_init(lwgsm_evt_fn evt_func, const uint32_t blocking) {
         goto cleanup;
     }
 
-    printf("lwgsm_sys_sem_wait\r\n");
     lwgsm_sys_sem_wait(&lwgsm.sem_sync, 0); /* Wait semaphore, should be unlocked in produce thread */
     lwgsm_sys_sem_release(&lwgsm.sem_sync); /* Release semaphore manually */
 
@@ -167,16 +165,13 @@ lwgsm_init(lwgsm_evt_fn evt_func, const uint32_t blocking) {
 #if LWGSM_CFG_RESET_ON_INIT
     if (lwgsm.status.f.dev_present) {
         lwgsm_core_unlock();
-        printf("lwgsm_reset_with_delay\r\n");
         res = lwgsm_reset_with_delay(LWGSM_CFG_RESET_DELAY_DEFAULT, NULL, NULL,
                                      blocking); /* Send reset sequence with delay */
-        printf("lwgsm_reset_with_delay\r\n");
         lwgsm_core_lock();
     }
 #else  /* LWGSM_CFG_RESET_ON_INIT */
     LWGSM_UNUSED(blocking);
 #endif /* !LWGSM_CFG_RESET_ON_INIT */
-    printf("lwgsm_reset_with_delay\r\n");
     lwgsm_core_unlock();
 
     return res;
@@ -225,7 +220,9 @@ lwgsm_reset_with_delay(uint32_t delay, const lwgsm_api_cmd_evt_fn evt_fn, void* 
     LWGSM_MSG_VAR_ALLOC(msg, blocking);
     LWGSM_MSG_VAR_SET_EVT(msg, evt_fn, evt_arg);
     LWGSM_MSG_VAR_REF(msg).cmd_def = LWGSM_CMD_RESET;
+    LWGSM_MSG_VAR_REF(msg).cmd = LWGSM_CFG_RESET_INIT_AUTO_BAUDRATE ? LWGSM_CMD_AUTO_BAUDRATE : LWGSM_CMD_RESET;
     LWGSM_MSG_VAR_REF(msg).msg.reset.delay = delay;
+    LWGSM_MSG_VAR_REF(msg).msg.reset.tries = 0;
 
     return lwgsmi_send_msg_to_producer_mbox(&LWGSM_MSG_VAR_REF(msg), lwgsmi_initiate_cmd, 60000);
 }

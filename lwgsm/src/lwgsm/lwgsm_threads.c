@@ -61,7 +61,7 @@ lwgsm_thread_produce(void* const arg) {
         do {
             time = lwgsm_sys_mbox_get(&e->mbox_producer, (void**)&msg, 0); /* Get message from queue */
         } while (time == LWGSM_SYS_TIMEOUT || msg == NULL);
-        LWGSM_THREAD_PRODUCER_HOOK(); /* Execute producer thread hook */
+        LWGSM_THREAD_PRODUCER_HOOK();                                      /* Execute producer thread hook */
         lwgsm_core_lock();
 
         res = lwgsmOK; /* Start with OK */
@@ -98,7 +98,30 @@ lwgsm_thread_produce(void* const arg) {
             lwgsm_core_unlock();
             lwgsm_sys_sem_wait(&e->sem_sync, 0); /* First call */
             lwgsm_core_lock();
-            res = msg->fn(msg);        /* Process this message, check if command started at least */
+            res = msg->fn(msg);                  /* Process this message, check if command started at least */
+
+            if (res == lwgsmOK && msg->cmd == LWGSM_CMD_AUTO_BAUDRATE && LWGSM_CFG_RESET_INIT_AUTO_BAUDRATE) {
+                /*
+                 * For auto baudrate detection, we need to send AT until
+                 * we receive "OK" as response.
+                 */
+                while (++msg->msg.reset.tries < LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS) {
+                    lwgsm_sys_sem_wait(&e->sem_sync,
+                                       LWGSM_CFG_RESET_AUTOBAUD_DELAY); /* Wait some time to allow device to reset */
+                    lwgsm_core_lock();
+                    if (msg->cmd != LWGSM_CMD_AUTO_BAUDRATE) {          /* Received "OK" response? */
+                        break;
+                    }
+                    printf("[SIM7000G] Trying to detect baudrate %d of %d\r\n", msg->msg.reset.tries + 1,
+                           LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS);
+                    res = msg->fn(msg); /* Process the command again to retry */
+                    if (res != lwgsmOK) {
+                        break;
+                    }
+                    lwgsm_core_unlock();
+                }
+            }
+
             time = ~LWGSM_SYS_TIMEOUT; /* Reset time */
             if (res == lwgsmOK) {      /* We have valid data and data were sent */
                 lwgsm_core_unlock();
@@ -157,7 +180,7 @@ lwgsm_thread_produce(void* const arg) {
         if (msg->evt_fn != NULL) {
             msg->evt_fn(msg->res, msg->evt_arg); /* Send event with user argument */
         }
-#endif /* LWGSM_CFG_USE_API_FUNC_EVT */
+#endif                                           /* LWGSM_CFG_USE_API_FUNC_EVT */
 
         /*
          * In case message is blocking,
@@ -203,7 +226,7 @@ lwgsm_thread_process(void* const arg) {
         lwgsm_core_lock();
 
         if (time == LWGSM_SYS_TIMEOUT || msg == NULL) {
-            LWGSM_UNUSED(time); /* Unused variable */
+            LWGSM_UNUSED(time);  /* Unused variable */
         }
         lwgsmi_process_buffer(); /* Process input data */
 #else                            /* LWGSM_CFG_INPUT_USE_PROCESS */
