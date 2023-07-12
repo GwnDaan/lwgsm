@@ -41,32 +41,31 @@
  * copy & replace here settings you want to change values
  */
 #if !__DOXYGEN__
-#define LWGSM_CFG_DBG                         LWGSM_DBG_ON
-#define LWGSM_CFG_DBG_TYPES_ON                LWGSM_DBG_TYPE_TRACE | LWGSM_DBG_TYPE_STATE
-#define LWGSM_CFG_DBG_MQTT                    LWGSM_DBG_OFF
+#define LWGSM_CFG_DBG               LWGSM_DBG_ON
+#define LWGSM_CFG_DBG_TYPES_ON      LWGSM_DBG_TYPE_TRACE | LWGSM_DBG_TYPE_STATE
+#define LWGSM_CFG_DBG_MQTT          LWGSM_DBG_ON
+#define LWGSM_CFG_DBG_MQTT_API      LWGSM_DBG_ON
 
-#define LWGSM_CFG_CONN_MAX_DATA_LEN           1460
-#define LWGSM_CFG_INPUT_USE_PROCESS           1
-#define LWGSM_CFG_AT_ECHO                     0
+#define LWGSM_CFG_CONN_MAX_DATA_LEN 1460
+#define LWGSM_CFG_INPUT_USE_PROCESS 1
+#define LWGSM_CFG_AT_ECHO           1
 
-#define LWGSM_CFG_NETWORK                     1
+#define LWGSM_CFG_NETWORK           1
 
-#define LWGSM_CFG_CONN                        1
-#define LWGSM_CFG_SMS                         0
-#define LWGSM_CFG_CALL                        0
-#define LWGSM_CFG_PHONEBOOK                   0
-#define LWGSM_CFG_USSD                        0
+#define LWGSM_CFG_CONN              1
+#define LWGSM_CFG_SMS               0
+#define LWGSM_CFG_CALL              0
+#define LWGSM_CFG_PHONEBOOK         0
+#define LWGSM_CFG_USSD              0
 
-#define LWGSM_CFG_USE_API_FUNC_EVT            1
+#define LWGSM_CFG_USE_API_FUNC_EVT  1
 
-#define LWGSM_CFG_NETCONN                     1
+#define LWGSM_CFG_NETCONN           1
 
-#define LWGSM_CFG_MEM_CUSTOM                  0
+#define LWGSM_CFG_MEM_CUSTOM        0
 
-#define LWGSM_CFG_NETWORK_IGNORE_CGACT_RESULT 1
-
-#define CONFIG_LWGSM_TX                       27
-#define CONFIG_LWGSM_RX                       26
+#define CONFIG_LWGSM_TX             27
+#define CONFIG_LWGSM_RX             26
 
 #if defined(WIN32)
 #define LWGSM_CFG_SYS_PORT LWGSM_SYS_PORT_WIN32

@@ -112,8 +112,8 @@ lwgsm_thread_produce(void* const arg) {
                     if (msg->cmd != LWGSM_CMD_AUTO_BAUDRATE) {          /* Received "OK" response? */
                         break;
                     }
-                    printf("[SIM7000G] Trying to detect baudrate %d of %d\r\n", msg->msg.reset.tries + 1,
-                           LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS);
+                    LWGSM_CFG_DBG_OUT("[SIM7000G] Trying to detect baudrate %d of %d\r\n", msg->msg.reset.tries + 1,
+                                      LWGSM_CFG_RESET_AUTOBAUD_NUM_TRIALS);
                     res = msg->fn(msg); /* Process the command again to retry */
                     if (res != lwgsmOK) {
                         break;

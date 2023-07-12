@@ -1018,8 +1018,11 @@ lwgsmi_parse_received(lwgsm_recv_t* rcv) {
         }
     }
 
-    // printf("Rx: %s, is_ok: %d\n\r", rcv->data, stat.is_ok);
-
+    if (lwgsm.msg != NULL) {
+        LWGSM_CFG_DBG_OUT("Cmd %d, is_ok: %d, Rx: %s", lwgsm.msg->cmd, stat.is_ok, rcv->data);
+    } else {
+        LWGSM_CFG_DBG_OUT("Cmd NULL, is_ok: %d, Rx: %s", stat.is_ok, rcv->data);
+    }
     /*
      * In case of any of these events, simply release semaphore
      * and proceed with next command

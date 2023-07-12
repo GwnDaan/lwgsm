@@ -38,6 +38,7 @@
 /* #define LWGSM_IGNORE_USER_OPTS */
 
 /* Include application options */
+#include <esp_log.h>
 #include "lwgsm/lwgsm_debug_types.h"
 #ifndef LWGSM_IGNORE_USER_OPTS
 #include "lwgsm_opts.h"
@@ -278,6 +279,7 @@
 #define LWGSM_CFG_DBG_OUT(fmt, ...)                                                                                    \
     do {                                                                                                               \
         extern int printf(const char* format, ...);                                                                    \
+        printf("%s: ", esp_log_system_timestamp());                                                                    \
         printf(fmt, ##__VA_ARGS__);                                                                                    \
     } while (0)
 #endif
@@ -309,7 +311,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_INIT
-#define LWGSM_CFG_DBG_INIT LWGSM_DBG_ON
+#define LWGSM_CFG_DBG_INIT LWGSM_DBG_OFF
 #endif
 
 /**
@@ -327,7 +329,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_INPUT
-#define LWGSM_CFG_DBG_INPUT LWGSM_DBG_ON
+#define LWGSM_CFG_DBG_INPUT LWGSM_DBG_OFF
 #endif
 
 /**
@@ -354,7 +356,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_IPD
-#define LWGSM_CFG_DBG_IPD LWGSM_DBG_ON
+#define LWGSM_CFG_DBG_IPD LWGSM_DBG_OFF
 #endif
 
 /**
@@ -390,7 +392,7 @@
  * Possible values are \ref LWGSM_DBG_ON or \ref LWGSM_DBG_OFF
  */
 #ifndef LWGSM_CFG_DBG_NETCONN
-#define LWGSM_CFG_DBG_NETCONN LWGSM_DBG_OFF
+#define LWGSM_CFG_DBG_NETCONN LWGSM_DBG_ON
 #endif
 
 /**
