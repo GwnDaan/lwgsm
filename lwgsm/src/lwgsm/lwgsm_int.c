@@ -754,7 +754,7 @@ lwgsmi_parse_received(lwgsm_recv_t* rcv) {
     /* Check for PSUTTZ time */
     if (rcv->data[0] == '*' && !strncmp(rcv->data, "*PSUTTZ:", 8)) {
         const char* tmp = &rcv->data[9];
-        lwgsm_datetime_t *dt = &lwgsm.evt.evt.time.time;
+        lwgsm_datetime_t* dt = &lwgsm.evt.evt.time.time;
 
         dt->year = LWGSM_U16(2000) + lwgsmi_parse_number(&tmp);
         dt->month = lwgsmi_parse_number(&tmp);
@@ -767,7 +767,27 @@ lwgsmi_parse_received(lwgsm_recv_t* rcv) {
 
     /* Scan received strings which start with '+' */
     if (rcv->data[0] == '+') {
-        if (!strncmp(rcv->data, "+CSQ", 4)) {
+        if (!strncmp(rcv->data, "+UGNSINF", 8)) {
+            // Parse latitude, longitude and speed if available
+            const char* tmp = &rcv->data[10];
+
+            int32_t hasPower = lwgsmi_parse_number(&tmp);
+            if (hasPower == 1) {
+                int32_t hasFix = lwgsmi_parse_number(&tmp);
+                if (hasFix == 1) {
+                    // Skip UTC time
+                    float utc = lwgsmi_parse_float_number(&tmp);
+                    printf("utc: %f\r\n", utc);
+
+                    lwgsm.evt.evt.gnss.latitude = lwgsmi_parse_float_number(&tmp);
+                    lwgsm.evt.evt.gnss.longitude = lwgsmi_parse_float_number(&tmp);
+                    lwgsmi_parse_float_number(&tmp); // Skip altitude
+                    lwgsm.evt.evt.gnss.speed = lwgsmi_parse_float_number(&tmp);
+
+                    lwgsmi_send_cb(LWGSM_EVT_GNSS_UPDATE);
+                }
+            }
+        } else if (!strncmp(rcv->data, "+CSQ", 4)) {
             lwgsmi_parse_csq(rcv->data); /* Parse +CSQ response */
 #if LWGSM_CFG_NETWORK
         } else if (!strncmp(rcv->data, "+PDP: DEACT", 11)) {
@@ -1444,7 +1464,15 @@ lwgsmi_process_sub_cmd(lwgsm_msg_t* msg, lwgsm_status_flags_t* stat) {
                 SET_NEW_CMD(LWGSM_CFG_AT_ECHO ? LWGSM_CMD_ATE1 : LWGSM_CMD_ATE0); /* Set ECHO mode */
                 break;
             case LWGSM_CMD_ATE0:
-            case LWGSM_CMD_ATE1: SET_NEW_CMD(LWGSM_CMD_CFUN_SET); break;     /* Set full functionality */
+            case LWGSM_CMD_ATE1: SET_NEW_CMD(LWGSM_CMD_GNSPOWERGPIO); break; /* Set GPIO Power for GNSS */
+            case LWGSM_CMD_GNSPOWERGPIO: {
+                lwgsm_delay(1000); /* Wait some time before we can continue */
+                SET_NEW_CMD(LWGSM_CMD_CGNSPWR);
+                break; /* Enable GNSS power */
+            }
+            case LWGSM_CMD_CGNSPWR: SET_NEW_CMD(LWGSM_CMD_CGNSURC); break;   /* Enable URC for GNSS */
+            case LWGSM_CMD_CGNSURC: SET_NEW_CMD(LWGSM_CMD_CGNSINF); break;   /* Get GNSS info */
+            case LWGSM_CMD_CGNSINF: SET_NEW_CMD(LWGSM_CMD_CPIN_GET); break;  /* Set full functionality */
             case LWGSM_CMD_CFUN_SET: SET_NEW_CMD(LWGSM_CMD_CMEE_SET); break; /* Set detailed error reporting */
             case LWGSM_CMD_CMEE_SET: SET_NEW_CMD(LWGSM_CMD_CGMI_GET); break; /* Get manufacturer */
             case LWGSM_CMD_CGMI_GET: SET_NEW_CMD(LWGSM_CMD_CGMM_GET); break; /* Get model */
@@ -1463,7 +1491,7 @@ lwgsmi_process_sub_cmd(lwgsm_msg_t* msg, lwgsm_status_flags_t* stat) {
             }
             case LWGSM_CMD_CREG_SET: SET_NEW_CMD(LWGSM_CMD_CLCC_SET); break; /* Set call state */
             case LWGSM_CMD_CLCC_SET: SET_NEW_CMD(LWGSM_CMD_CPIN_GET); break; /* Get SIM state */
-            case LWGSM_CMD_CPIN_GET: break;
+            case LWGSM_CMD_CPIN_GET: break;                                  /* Do nothing */
             default: break;
         }
 
@@ -1780,6 +1808,30 @@ lwgsmi_initiate_cmd(lwgsm_msg_t* msg) {
             /* Send manual AT command */
             AT_PORT_SEND_BEGIN_AT();
             AT_PORT_SEND_CONST_STR("+CFUN=1,1");
+            AT_PORT_SEND_END_AT();
+            break;
+        }
+        case LWGSM_CMD_CGNSINF: {
+            AT_PORT_SEND_BEGIN_AT();
+            AT_PORT_SEND_CONST_STR("+CGNSINF");
+            AT_PORT_SEND_END_AT();
+            break;
+        }
+        case LWGSM_CMD_GNSPOWERGPIO: {
+            AT_PORT_SEND_BEGIN_AT();
+            AT_PORT_SEND_CONST_STR("+CGPIO=0,48,1,1");
+            AT_PORT_SEND_END_AT();
+            break;
+        }
+        case LWGSM_CMD_CGNSPWR: {
+            AT_PORT_SEND_BEGIN_AT();
+            AT_PORT_SEND_CONST_STR("+CGNSPWR=1");
+            AT_PORT_SEND_END_AT();
+            break;
+        }
+        case LWGSM_CMD_CGNSURC: {
+            AT_PORT_SEND_BEGIN_AT();
+            AT_PORT_SEND_CONST_STR("+CGNSURC=25");
             AT_PORT_SEND_END_AT();
             break;
         }

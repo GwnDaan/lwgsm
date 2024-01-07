@@ -257,6 +257,11 @@ typedef enum {
     LWGSM_CMD_CSMP,         /*!< Set SMS Text Mode Parameters */
     LWGSM_CMD_CSMS,         /*!< Select Message Service */
 
+    LWGSM_CMD_GNSPOWERGPIO,  /*!< GNSS Power GPIO */
+    LWGSM_CMD_CGNSPWR,      /*!< GNSS Power Control */
+    LWGSM_CMD_CGNSINF,      /*!< GNNS navigation information */
+    LWGSM_CMD_CGNSURC,      /*!< GNSS URC control */
+
     LWGSM_CMD_END,          /*!< Last CMD entry */
 } lwgsm_cmd_t;
 

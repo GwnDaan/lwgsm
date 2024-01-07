@@ -41,6 +41,7 @@ extern "C" {
 #include "lwgsm/lwgsm_types.h"
 
 int32_t lwgsmi_parse_number(const char** str);
+float lwgsmi_parse_float_number(const char** str);
 uint8_t lwgsmi_parse_string(const char** src, char* dst, size_t dst_len, uint8_t trim);
 uint8_t lwgsmi_parse_ip(const char** src, lwgsm_ip_t* ip);
 uint8_t lwgsmi_parse_mac(const char** src, lwgsm_mac_t* mac);

@@ -401,6 +401,8 @@ typedef enum lwgsm_cb_type_t {
     LWGSM_EVT_NETWORK_REG_CHANGED,      /*!< Network registration changed.
                                                          Available even when \ref LWGSM_CFG_NETWORK is disabled */
     LWGSM_EVT_TIME_SYNCHRONIZED,        /*!< Time received from operator */
+    LWGSM_EVT_GNSS_UPDATE,              /*!< GNSS update event */
+    
 #if LWGSM_CFG_NETWORK || __DOXYGEN__
     LWGSM_EVT_NETWORK_ATTACHED,         /*!< Attached to network, PDP context active and ready for TCP/IP application */
     LWGSM_EVT_NETWORK_DETACHED,         /*!< Detached from network, PDP context not active anymore */
@@ -476,6 +478,12 @@ typedef struct lwgsm_evt {
         struct {
             lwgsm_datetime_t time; /*!< Date and time */
         } time;
+
+        struct {
+            float latitude; /*!< Latitude */
+            float longitude; /*!< Longitude */
+            float speed; /*!< Speed in km/h */
+        } gnss;
 
 #if LWGSM_CFG_CONN || __DOXYGEN__
         struct {

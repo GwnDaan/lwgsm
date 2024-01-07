@@ -55,6 +55,7 @@ lwgsmr_t lwgsm_device_get_revision(char* rev, size_t len, const lwgsm_api_cmd_ev
                                    const uint32_t blocking);
 lwgsmr_t lwgsm_device_get_serial_number(char* serial, size_t len, const lwgsm_api_cmd_evt_fn evt_fn,
                                         void* const evt_arg, const uint32_t blocking);
+lwgsmr_t lwgsm_device_get_location(float* latitude, float* longitude, float* speed);
 
 /**
  * \}

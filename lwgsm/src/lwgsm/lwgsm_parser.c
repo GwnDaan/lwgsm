@@ -568,6 +568,57 @@ lwgsmi_parse_datetime(const char** src, lwgsm_datetime_t* dt) {
     return 1;
 }
 
+float
+lwgsmi_parse_float_number(const char** src) {
+    uint64_t val = 0;
+    uint8_t minus = 0;
+    uint64_t decimal_pow = 0;
+    const char* p = *src; /*  */
+
+    if (*p == '"') { /* Skip leading quotes */
+        ++p;
+    }
+    if (*p == ',') { /* Skip leading comma */
+        ++p;
+    }
+    if (*p == '"') { /* Skip leading quotes */
+        ++p;
+    }
+    if (*p == '/') { /* Skip '/' character, used in datetime */
+        ++p;
+    }
+    if (*p == ':') { /* Skip ':' character, used in datetime */
+        ++p;
+    }
+    if (*p == '+') { /* Skip '+' character, used in datetime */
+        ++p;
+    }
+    if (*p == '-') { /* Check negative number */
+        minus = 1;
+        ++p;
+    }
+    while (LWGSM_CHARISNUM(*p) || *p == '.') {
+        if (*p == '.') {
+            decimal_pow = 1;
+        } else {
+            if (decimal_pow > 0) {
+                decimal_pow *= 10;
+            }
+            val = val * 10 + LWGSM_CHARTONUM(*p);
+        }
+        ++p;
+    }
+    if (*p == '"') { /* Skip trailling quotes */
+        ++p;
+    }
+    *src = p; /* Save new pointer with new offset */
+
+    if (decimal_pow > 0) {
+        return minus ? -((float)val / (float)decimal_pow) : ((float)val / (float)decimal_pow);
+    }
+    return minus ? -val : val;
+}
+
 #if LWGSM_CFG_CALL || __DOXYGEN__
 
 /**
