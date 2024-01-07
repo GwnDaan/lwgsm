@@ -64,6 +64,17 @@ lwgsm_network_attach(const char* apn, const char* user, const char* pass, const 
     return lwgsmi_send_msg_to_producer_mbox(&LWGSM_MSG_VAR_REF(msg), lwgsmi_initiate_cmd, 200000);
 }
 
+lwgsmr_t
+lwgsm_network_recall_pdp_context(const lwgsm_api_cmd_evt_fn evt_fn, void* const evt_arg, const uint32_t blocking) {
+    LWGSM_MSG_VAR_DEFINE(msg);
+
+    LWGSM_MSG_VAR_ALLOC(msg, blocking);
+    LWGSM_MSG_VAR_SET_EVT(msg, evt_fn, evt_arg);
+    LWGSM_MSG_VAR_REF(msg).cmd_def = LWGSM_CMD_CIPSHUT;
+
+    return lwgsmi_send_msg_to_producer_mbox(&LWGSM_MSG_VAR_REF(msg), lwgsmi_initiate_cmd, 65000);
+}
+
 /**
  * \brief           Detach from network
  * \param[in]       evt_fn: Callback function called when command has finished. Set to `NULL` when not used

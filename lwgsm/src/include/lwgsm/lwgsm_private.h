@@ -449,6 +449,7 @@ typedef struct lwgsm_msg {
             uint8_t fau;                 /*!< Free after use flag to free memory after data are sent (or not) */
             size_t* bw;                  /*!< Number of bytes written so far */
             uint8_t val_id;              /*!< Connection current validation ID when command was sent to queue */
+            uint8_t reset_pdp_context;   /*!< Set to 1 to make PDP context come back to original state */
         } conn_send;                     /*!< Structure to send data on connection */
 #endif                                   /* LWGSM_CFG_CONN || __DOXYGEN__ */
 #if LWGSM_CFG_SMS || __DOXYGEN__

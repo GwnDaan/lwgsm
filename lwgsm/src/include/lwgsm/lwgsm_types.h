@@ -400,6 +400,7 @@ typedef enum lwgsm_cb_type_t {
     LWGSM_EVT_NETWORK_OPERATOR_CURRENT, /*!< Current operator event */
     LWGSM_EVT_NETWORK_REG_CHANGED,      /*!< Network registration changed.
                                                          Available even when \ref LWGSM_CFG_NETWORK is disabled */
+    LWGSM_EVT_TIME_SYNCHRONIZED,        /*!< Time received from operator */
 #if LWGSM_CFG_NETWORK || __DOXYGEN__
     LWGSM_EVT_NETWORK_ATTACHED,         /*!< Attached to network, PDP context active and ready for TCP/IP application */
     LWGSM_EVT_NETWORK_DETACHED,         /*!< Detached from network, PDP context not active anymore */
@@ -471,6 +472,10 @@ typedef struct lwgsm_evt {
         struct {
             int16_t rssi; /*!< Strength in units of dBm */
         } rssi;           /*!< Signal strength event. Use with \ref LWGSM_EVT_SIGNAL_STRENGTH event */
+
+        struct {
+            lwgsm_datetime_t time; /*!< Date and time */
+        } time;
 
 #if LWGSM_CFG_CONN || __DOXYGEN__
         struct {
